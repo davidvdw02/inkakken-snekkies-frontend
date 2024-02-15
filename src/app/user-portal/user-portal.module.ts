@@ -16,6 +16,10 @@ const userPortalRoutes: Routes = [
   {
     path: 'onlinerecipe', component: OnlineRecipeComponent,
   },
+  {
+    path: 'recipe', loadChildren: () => import('./recipe/recipe.module')
+      .then((m) => m.RecipeModule)
+  },
 ]
 
 @NgModule({
