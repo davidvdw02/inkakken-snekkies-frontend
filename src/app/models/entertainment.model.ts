@@ -7,7 +7,7 @@ export type Entertainment = {
   type: Type;
   onlineEntertainmentId: string;
   movieNightId: string;
-  snekkie: Snekkie[];
+  snekkies: Snekkie[];
 }
 
 enum Type {
