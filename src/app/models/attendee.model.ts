@@ -1,4 +1,4 @@
 export type Attendee = {
-  id: string;
+  id: string | undefined;
   name: string;
 }

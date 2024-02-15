@@ -1,0 +1,5 @@
+<p>the list of the movie nights </p>
+<div *ngFor="let movieNight of movieNightList" >
+  <app-movie-night-item (click)="selectedMovieNight(movieNight)" [movieNight]="movieNight"></app-movie-night-item>
+</div>
+
