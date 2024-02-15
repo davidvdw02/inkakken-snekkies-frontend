@@ -2,7 +2,7 @@ import {Attendee} from "./attendee.model";
 
 export type MovieNight = {
   id: string;
-  date: Date;
+  date: string;
   location: string;
   attendees: Attendee[];
 }
