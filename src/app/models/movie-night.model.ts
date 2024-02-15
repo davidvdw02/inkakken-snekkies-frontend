@@ -1,6 +1,6 @@
 import {Attendee} from "./attendee.model";
 
-export type movieNight = {
+export type MovieNight = {
   id: string;
   date: Date;
   location: string;

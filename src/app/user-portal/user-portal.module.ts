@@ -7,7 +7,11 @@ import {MovieNightModule} from "./movie-night/movie-night.module";
 const userPortalRoutes: Routes = [
   {
     path: '', component: UserPortalComponent,
-  }
+  },
+  {
+    path: 'movienight', loadChildren: () => import('./movie-night/movie-night.module')
+      .then((m) => m.MovieNightModule)
+  },
 ]
 
 @NgModule({
