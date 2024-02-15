@@ -1,6 +1,7 @@
 export type OnlineRecipe = {
-  id: string;
+  id?: string;
   link: string;
-  ingredients: string;
-  duration: number;
+  ingredients?: string;
+  duration?: number;
+  name?: string;
 }
