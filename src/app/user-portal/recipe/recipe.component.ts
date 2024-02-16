@@ -21,6 +21,7 @@ export class RecipeComponent {
   hours: number = 0;
   minutes: number = 0;
   seconds: number = 0;
+  error: string = '';
 
   constructor(private activatedRoute: ActivatedRoute, private recipeService: RecipeService) {}
 
@@ -101,20 +102,21 @@ export class RecipeComponent {
     
     validateRecipe(): boolean {
       if (!this.recipe.startTime || !this.recipe.duration) {
-        console.error("Start time and duration are required.");
+        this.error = "Start time and duration are required.";
         return false;
       }
+      this.error = '';
       
       if (this.deviatons) {
         for (let i = 0; i < this.deviatons.length; i++) {
           const deviation = this.deviatons[i];
-          console.log(deviation);
           if (!deviation.product || !deviation.amount || !deviation.addedOrSubstracted === undefined) {
-            console.error(`Deviated ingredient at index ${i} is missing required fields.`);
+           this.error = `Deviated ingredient is missing required fields.`;
             return false;
           }
         }
       }
+      this.error = '';
       
       return true;
     }
