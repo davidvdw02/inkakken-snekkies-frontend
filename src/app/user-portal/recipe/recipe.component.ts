@@ -79,20 +79,43 @@ export class RecipeComponent {
 
   onDeviationChange(deviation: DeviatedIngredient, index: number) {
     this.deviatons[index] = deviation;
+    console.log(this.deviatons)
   }
 
   next() {
-    forkJoin(
-      this.deviatons
-        .filter(deviation => deviation.id === undefined)
-        .map(deviation => this.recipeService.postDeviation(deviation))
-    )
-    .pipe(
-      tap(deviationDataArray => {
-        this.recipe.deviatedIngredients = (this.recipe.deviatedIngredients || []).concat(deviationDataArray);
-        this.recipeService.postRecipe(this.recipe).subscribe();
-      })
-    )
-    .subscribe();
-  }
+    if(this.validateRecipe()){
+      forkJoin(
+        this.deviatons
+          .filter(deviation => deviation.id === undefined)
+          .map(deviation => this.recipeService.postDeviation(deviation))
+      )
+      .pipe(
+        tap(deviationDataArray => {
+          this.recipe.deviatedIngredients = (this.recipe.deviatedIngredients || []).concat(deviationDataArray);
+          this.recipeService.postRecipe(this.recipe).subscribe();
+        })
+      )
+      .subscribe();
+    }
+    }
+    
+    validateRecipe(): boolean {
+      if (!this.recipe.startTime || !this.recipe.duration) {
+        console.error("Start time and duration are required.");
+        return false;
+      }
+      
+      if (this.deviatons) {
+        for (let i = 0; i < this.deviatons.length; i++) {
+          const deviation = this.deviatons[i];
+          console.log(deviation);
+          if (!deviation.product || !deviation.amount || !deviation.addedOrSubstracted === undefined) {
+            console.error(`Deviated ingredient at index ${i} is missing required fields.`);
+            return false;
+          }
+        }
+      }
+      
+      return true;
+    }
 }

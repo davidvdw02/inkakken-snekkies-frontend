@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { RecipeComponent } from '../recipe/recipe.component';
 import { RouterModule, Routes } from '@angular/router';
 import { DeviationComponent } from './deviation/deviation.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 const recipeRoutes: Routes = [
   {
     path: ':id', component: RecipeComponent,
@@ -19,6 +19,7 @@ const recipeRoutes: Routes = [
     CommonModule,
     RouterModule.forChild(recipeRoutes),
     FormsModule,
+    ReactiveFormsModule
   ]
 })
 export class RecipeModule { }

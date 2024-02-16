@@ -1,51 +1,77 @@
-<div class="flex items-center mt-4">
-  <form #deviationForm="ngForm" (ngSubmit)="submitChanges()">
+<div class="items-center mt-4">
+  <form class="flex flex-row" [formGroup]="deviationForm" (ngSubmit)="submitChanges()">
     <div class="flex flex-col mr-4">
-      <label for="productInput" class="mb-1">Product</label>
+      <label for="product" class="mb-1">Product</label>
       <input
         type="text"
-        id="productInput"
-        name="productInput"
-        [(ngModel)]="deviation.product"
-        #productInput="ngModel"
+        id="product"
+        formControlName="product"
         class="border rounded py-2 px-3"
-        pattern="[a-zA-Z\s]+"
-        required
+        (change)="submitChanges()"
       />
-      <div *ngIf="productInput.invalid && (productInput.dirty || productInput.touched)">
-        <span class="text-red-500" *ngIf="productInput.errors?.['required']">Product is required.</span>
-        <span class="text-red-500" *ngIf="productInput.errors?.['pattern']">Please enter a valid product name (no special characters).</span>
+      <div
+        *ngIf="
+          deviationForm.get('product')?.invalid &&
+          (deviationForm.get('product')?.dirty ||
+            deviationForm.get('product')?.touched)
+        "
+      >
+        <span
+          class="text-red-500"
+          *ngIf="deviationForm.get('product')?.errors?.['required']"
+          >Product is required.</span
+        >
+        <span
+          class="text-red-500"
+          *ngIf="deviationForm.get('product')?.errors?.['pattern']"
+          >Please enter a valid product name (no special characters).</span
+        >
       </div>
     </div>
 
     <div class="flex flex-col mr-4">
-      <label for="amountInput" class="mb-1">Amount</label>
+      <label for="amount" class="mb-1">Amount</label>
       <input
         type="text"
-        id="amountInput"
-        name="amountInput"
-        [(ngModel)]="deviation.amount"
+        id="amount"
+        formControlName="amount"
         class="border rounded py-2 px-3"
-        pattern="[0-9]+"
-        required
+        (change)="submitChanges()"
       />
-      <div *ngIf="deviationForm.controls['amountInput'].invalid && (deviationForm.controls['amountInput'].dirty || deviationForm.controls['amountInput'].touched)">
-        <span class="text-red-500" *ngIf="deviationForm.controls['amountInput'].errors?.['required']">Amount is required.</span>
-        <span class="text-red-500" *ngIf="deviationForm.controls['amountInput'].errors?.['pattern']">Please enter a valid number for the amount.</span>
+      <div
+        *ngIf="
+          deviationForm.get('amount')?.invalid &&
+          (deviationForm.get('amount')?.dirty ||
+            deviationForm.get('amount')?.touched)
+        "
+      >
+        <span
+          class="text-red-500"
+          *ngIf="deviationForm.get('amount')?.errors?.['required']"
+          >Amount is required.</span
+        >
+        <span
+          class="text-red-500"
+          *ngIf="deviationForm.get('amount')?.errors?.['pattern']"
+          >Please enter a valid number for the amount.</span
+        >
       </div>
     </div>
 
     <div class="flex flex-col">
-      <label for="addedCheckbox" class="mb-1">Added</label>
+      <label for="addedOrSubstracted" class="mb-1">Added</label>
       <input
         type="checkbox"
-        id="addedCheckbox"
-        name="addedCheckbox"
-        [(ngModel)]="deviation.addedOrSubstracted"
+        id="addedOrSubstracted"
+        formControlName="addedOrSubstracted"
+        (change)="submitChanges()"
       />
     </div>
 
-    <button class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2" type="submit">
+    <button
+      class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2"
+      (click)="deleteDeviation()"
+    >
       &#10006; Delete
     </button>
   </form>
