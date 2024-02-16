@@ -22,8 +22,6 @@ export class MovieNightFormComponent {
   };
   existingAttendees: Attendee[] = [];
 
-
-
   constructor(private activatedRoute: ActivatedRoute,
               private movieNightFormService: MovieNightFormService,
               private datePipe: DatePipe,
@@ -70,8 +68,7 @@ export class MovieNightFormComponent {
       (response: string) => {
         if (response != undefined && response.trim() != '') {
           this.movieNightFormService.addAttendee(response).subscribe(
-            (response: Attendee) => {
-              console.log("dialog response " + response.id + response.name)
+            () => {
               this.getAllExistingAttendees();
             });
         }
@@ -86,7 +83,6 @@ export class MovieNightFormComponent {
     this.movieNightFormService.putMovieNight(this.movieNightId, this.movieNight).subscribe(
       () => {
         //todo route naar volgende pagina
-      }
-    )
+      });
   }
 }
