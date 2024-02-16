@@ -9,4 +9,9 @@
     <button class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" (click)="saveTime()" [disabled]="!timerRunning">Done</button>
     <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" (click)="resetTimer()">Reset Timer</button>
   </div>
+  <button class="bg-purple-500 hover:bg-purple-700 text-white font-bold py-3 px-6 rounded mt-8 ml-4 mr-4" (click)="addDeviation()">Add Deviation</button>
+  <app-deviation *ngFor="let deviation of deviatons; let i = index" (onDeviationDelete)="onDeviationDelete(i)" (deviationChange)="onDeviationChange($event, i)" [deviation]="deviation"></app-deviation>
+  <button class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-3 px-6 rounded mt-4" (click)="next()">Next</button>
 </div>
+
+

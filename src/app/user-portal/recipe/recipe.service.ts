@@ -12,4 +12,8 @@ export class RecipeService {
   postRecipe(recipe: Recipe) {
     return this.http.post('http://localhost:8080/recipe', recipe);
   }
+
+  postDeviation(deviation: any) {
+    return this.http.post('http://localhost:8080/deviatedingredient', deviation);
+  }
 }

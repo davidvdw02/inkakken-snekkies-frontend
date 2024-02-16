@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { Recipe } from 'src/app/models/recipe.model';
 import { RecipeService } from './recipe.service';
+import { DeviatedIngredient } from 'src/app/models/deviated-ingredient.model';
+import { forkJoin, tap } from 'rxjs';
 
 @Component({
   selector: 'app-recipe',
@@ -15,6 +17,7 @@ export class RecipeComponent {
   timerRunning: boolean = false;
 
   recipe: Recipe = {};
+  deviatons: DeviatedIngredient[] = [];
   hours: number = 0;
   minutes: number = 0;
   seconds: number = 0;
@@ -42,14 +45,17 @@ export class RecipeComponent {
       }, 1000);
       this.timerRunning = true;
       this.recipe.startTime = new Date();
-      this.recipeService.postRecipe(this.recipe).subscribe((data) => {this.recipe = data; console.log(this.recipe)});
+      this.recipeService.postRecipe(this.recipe).subscribe((data: any) => {this.recipe.id = data.id;});
     }
   }
 
   saveTime() {
     this.pauseTimer();
     this.recipe.duration = this.elapsedTime;
-    this.recipeService.postRecipe(this.recipe).subscribe((data) => {this.recipe = data; console.log(this.recipe)});
+    this.recipeService.postRecipe(this.recipe).subscribe();
+  }
+  addDeviation() {
+    this.deviatons.push({product: '', amount: undefined, addedOrSubstracted: true});
   }
 
   pauseTimer() {
@@ -65,5 +71,28 @@ export class RecipeComponent {
 
   formatTime(value: number): string {
     return value < 10 ? `0${value}` : `${value}`;
+  }
+
+  onDeviationDelete(index: number) {
+      this.deviatons.splice(index, 1);
+  }
+
+  onDeviationChange(deviation: DeviatedIngredient, index: number) {
+    this.deviatons[index] = deviation;
+  }
+
+  next() {
+    forkJoin(
+      this.deviatons
+        .filter(deviation => deviation.id === undefined)
+        .map(deviation => this.recipeService.postDeviation(deviation))
+    )
+    .pipe(
+      tap(deviationDataArray => {
+        this.recipe.deviatedIngredients = (this.recipe.deviatedIngredients || []).concat(deviationDataArray);
+        this.recipeService.postRecipe(this.recipe).subscribe();
+      })
+    )
+    .subscribe();
   }
 }
