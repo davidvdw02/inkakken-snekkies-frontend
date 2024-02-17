@@ -19,5 +19,4 @@ export class AddAttendeePopupComponent {
   closeDialog() {
     this.dialogRef.close();
   }
-
 }
