@@ -16,4 +16,9 @@ export class RecipeService {
   postDeviation(deviation: any) {
     return this.http.post('http://localhost:8080/deviatedingredient', deviation);
   }
+
+  getRecipe(id: string) {
+    return this.http.get('http://localhost:8080/recipe/' + id);
+  }
+
 }

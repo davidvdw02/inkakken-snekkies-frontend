@@ -4,16 +4,21 @@ import { RecipeComponent } from '../recipe/recipe.component';
 import { RouterModule, Routes } from '@angular/router';
 import { DeviationComponent } from './deviation/deviation.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { RecipeFormComponent } from './recipe-form/recipe-form.component';
 const recipeRoutes: Routes = [
   {
-    path: ':id', component: RecipeComponent,
+    path: 'id/:id', component: RecipeComponent,
+  },
+  {
+    path: 'form/:id', component: RecipeFormComponent,
   }
 ]
 
 @NgModule({
   declarations: [
     RecipeComponent,
-    DeviationComponent
+    DeviationComponent,
+    RecipeFormComponent
   ],
   imports: [
     CommonModule,

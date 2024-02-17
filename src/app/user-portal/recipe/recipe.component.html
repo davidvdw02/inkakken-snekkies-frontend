@@ -15,7 +15,7 @@
   *ngIf="this.error"
   >{{error}}</span>
 
-  <app-deviation *ngFor="let deviation of deviatons; let i = index" (onDeviationDelete)="onDeviationDelete(i)" (deviationChange)="onDeviationChange($event, i)" [deviation]="deviation"></app-deviation>
+  <app-deviation *ngFor="let deviation of deviations; let i = index" (onDeviationDelete)="onDeviationDelete(i)" (deviationChange)="onDeviationChange($event, i)" [deviation]="deviation"></app-deviation>
   <button class="bg-yellow-500 hover:bg-yellow-700 text-white font-bold py-3 px-6 rounded mt-4" (click)="next()">Next</button>
 </div>
 

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Recipe } from 'src/app/models/recipe.model';
 import { RecipeService } from './recipe.service';
 import { DeviatedIngredient } from 'src/app/models/deviated-ingredient.model';
@@ -17,13 +17,13 @@ export class RecipeComponent {
   timerRunning: boolean = false;
 
   recipe: Recipe = {};
-  deviatons: DeviatedIngredient[] = [];
+  deviations: DeviatedIngredient[] = [];
   hours: number = 0;
   minutes: number = 0;
   seconds: number = 0;
   error: string = '';
 
-  constructor(private activatedRoute: ActivatedRoute, private recipeService: RecipeService) {}
+  constructor(private activatedRoute: ActivatedRoute, private recipeService: RecipeService, private router: Router) {}
 
   ngOnInit() {
     this.activatedRoute.params.subscribe((params) => {
@@ -56,7 +56,7 @@ export class RecipeComponent {
     this.recipeService.postRecipe(this.recipe).subscribe();
   }
   addDeviation() {
-    this.deviatons.push({product: '', amount: undefined, addedOrSubstracted: true});
+    this.deviations.push({product: '', amount: undefined, addedOrSubstracted: true});
   }
 
   pauseTimer() {
@@ -75,30 +75,34 @@ export class RecipeComponent {
   }
 
   onDeviationDelete(index: number) {
-      this.deviatons.splice(index, 1);
+      this.deviations.splice(index, 1);
   }
 
   onDeviationChange(deviation: DeviatedIngredient, index: number) {
-    this.deviatons[index] = deviation;
-    console.log(this.deviatons)
+    this.deviations[index] = deviation;
+    console.log(this.deviations)
   }
 
   next() {
-    if(this.validateRecipe()){
-      forkJoin(
-        this.deviatons
-          .filter(deviation => deviation.id === undefined)
-          .map(deviation => this.recipeService.postDeviation(deviation))
-      )
-      .pipe(
-        tap(deviationDataArray => {
-          this.recipe.deviatedIngredients = (this.recipe.deviatedIngredients || []).concat(deviationDataArray);
-          this.recipeService.postRecipe(this.recipe).subscribe();
-        })
-      )
-      .subscribe();
+    if (this.validateRecipe()) {
+      this.recipeService.postRecipe(this.recipe).subscribe((recipe: Recipe) => {
+
+        this.router.navigate(['/recipe/form/' + recipe.id]);
+  
+        if (this.deviations.length > 0) {
+          forkJoin(
+            this.deviations
+              .filter(deviation => deviation.id === undefined)
+              .map(deviation => this.recipeService.postDeviation(deviation))
+          )
+          .subscribe(deviationDataArray => {
+            this.recipe.deviatedIngredients = (this.recipe.deviatedIngredients || []).concat(deviationDataArray);
+            this.recipeService.postRecipe(this.recipe).subscribe();
+          });
+        }
+      });
     }
-    }
+  }
     
     validateRecipe(): boolean {
       if (!this.recipe.startTime || !this.recipe.duration) {
@@ -107,9 +111,9 @@ export class RecipeComponent {
       }
       this.error = '';
       
-      if (this.deviatons) {
-        for (let i = 0; i < this.deviatons.length; i++) {
-          const deviation = this.deviatons[i];
+      if (this.deviations) {
+        for (let i = 0; i < this.deviations.length; i++) {
+          const deviation = this.deviations[i];
           if (!deviation.product || !deviation.amount || !deviation.addedOrSubstracted === undefined) {
            this.error = `Deviated ingredient is missing required fields.`;
             return false;
@@ -117,7 +121,7 @@ export class RecipeComponent {
         }
       }
       this.error = '';
-      
+
       return true;
     }
 }

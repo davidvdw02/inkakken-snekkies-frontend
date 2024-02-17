@@ -16,6 +16,6 @@ export class OnlineRecipeComponent {
   constructor(private onlineRecipeService: OnlineRecipeService, private router: Router) {}
 
   onSubmit() {
-    this.onlineRecipeService.createOnlineRecipe(this.onlineRecipe).subscribe(data => this.router.navigate(['/recipe', data.id]));
+    this.onlineRecipeService.createOnlineRecipe(this.onlineRecipe).subscribe(data => this.router.navigate(['/recipe/id', data.id]));
   }
 }
