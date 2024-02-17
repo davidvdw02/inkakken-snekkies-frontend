@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {ActivatedRoute} from "@angular/router";
+import {ActivatedRoute, Router} from "@angular/router";
 import {MovieNightFormService} from "./movie-night-form.service";
 import {MovieNight} from "../../../models/movie-night.model";
 import {DatePipe} from "@angular/common";
@@ -25,7 +25,8 @@ export class MovieNightFormComponent {
   constructor(private activatedRoute: ActivatedRoute,
               private movieNightFormService: MovieNightFormService,
               private datePipe: DatePipe,
-              private dialog: MatDialog) {
+              private dialog: MatDialog,
+              private router: Router) {
   }
 
   ngOnInit() {
@@ -82,7 +83,7 @@ export class MovieNightFormComponent {
   onSubmit() {
     this.movieNightFormService.putMovieNight(this.movieNightId, this.movieNight).subscribe(
       () => {
-        //todo route naar volgende pagina
+       this.router.navigate(['/onlinerecipe/id/' + this.movieNightId]);
       });
   }
 }
