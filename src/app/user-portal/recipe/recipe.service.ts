@@ -9,7 +9,7 @@ export class RecipeService {
 
   constructor(private http: HttpClient) { }
 
-  postRecipe(recipe: Recipe) {
+  putRecipe(recipe: Recipe) {
     return this.http.post('http://localhost:8080/recipe', recipe);
   }
 

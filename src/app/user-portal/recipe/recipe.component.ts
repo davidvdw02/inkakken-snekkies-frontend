@@ -29,6 +29,7 @@ export class RecipeComponent {
     this.activatedRoute.params.subscribe((params) => {
       this.recipe.onlineRecipeId = params['id'];
     });
+    
   }
 
   resetTimer() {
@@ -46,7 +47,7 @@ export class RecipeComponent {
       }, 1000);
       this.timerRunning = true;
       this.recipe.startTime = new Date();
-      this.recipeService.postRecipe(this.recipe).subscribe((data: any) => {this.recipe.id = data.id;});
+      this.recipeService.putRecipe(this.recipe).subscribe();
     }
   }
 
@@ -84,6 +85,7 @@ export class RecipeComponent {
   }
 
   next() {
+    console.log(this.recipe)
     if (this.validateRecipe()) {
       this.recipeService.postRecipe(this.recipe).subscribe((recipe: Recipe) => {
 
