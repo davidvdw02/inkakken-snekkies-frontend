@@ -50,12 +50,11 @@ export class MovieNightFormComponent {
       (response: Attendee[]) => {
         this.existingAttendees = response;
         this.existingAttendees.push({id: undefined,name: 'Add New Attendee'});
-      }
-    )
+      });
   }
 
-  onAttendeeChange(attendeeName?: string) {
-    if(attendeeName == 'Add New Attendee') {
+  onAttendeeChange(attendeeName?: any) {
+    if(attendeeName.name == 'Add New Attendee') {
       this.handleAddAttendeeDialog();
     }
   }
@@ -69,20 +68,21 @@ export class MovieNightFormComponent {
       (response: string) => {
         if (response != undefined && response.trim() != '') {
           this.movieNightFormService.addAttendee(response).subscribe(
-            (response: Attendee) => {
+            () => {
               this.getAllExistingAttendees();
-            }
-          );
+            });
         }
-      }
-    )
+      });
   }
 
   addAttendee() {
-    this.movieNight.attendees.push({id: '', name: 'temp'});
+    this.movieNight.attendees.push({id: '', name: ' '});
   }
 
   onSubmit() {
-
+    this.movieNightFormService.putMovieNight(this.movieNightId, this.movieNight).subscribe(
+      () => {
+        //todo route naar volgende pagina
+      });
   }
 }
