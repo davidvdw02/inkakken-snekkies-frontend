@@ -14,7 +14,7 @@ const userPortalRoutes: Routes = [
       .then((m) => m.MovieNightModule)
   },
   {
-    path: 'onlinerecipe', component: OnlineRecipeComponent,
+    path: 'onlinerecipe/id/:id', component: OnlineRecipeComponent,
   },
   {
     path: 'recipe', loadChildren: () => import('./recipe/recipe.module')

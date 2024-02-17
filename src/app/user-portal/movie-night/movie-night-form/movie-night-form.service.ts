@@ -24,4 +24,8 @@ export class MovieNightFormService {
   putMovieNight(id: string, movieNight: MovieNight): any {
     return this.http.put("http://localhost:8080/movienight/" + id, movieNight);
   }
+
+  getOnlineRecipe(movieNightId: string): any {
+    return this.http.get("http://localhost:8080/recipe/onlinerecipe/" + movieNightId);
+  }
 }
