@@ -37,7 +37,7 @@ export class RecipeComponent {
           this.elapsedTime = this.recipe.duration;
           this.updateTimerDisplay();
         }
-        if(this.recipe.deviatedIngredients){
+        if(this.recipe.deviatedIngredients !== undefined && this.recipe.deviatedIngredients !== null && this.recipe.deviatedIngredients.length > 0){
           this.deviations = this.recipe.deviatedIngredients;
         }
       });
@@ -61,7 +61,7 @@ export class RecipeComponent {
       this.recipe.startTime = new Date();
       this.recipeService
         .putRecipe(this.recipe)
-        .subscribe((data) => console.log(data));
+        .subscribe();
     }
   }
 
@@ -99,11 +99,9 @@ export class RecipeComponent {
 
   onDeviationChange(deviation: DeviatedIngredient, index: number) {
     this.deviations[index] = deviation;
-    console.log(this.deviations);
   }
 
   next() {
-    console.log(this.recipe);
     if (this.validateRecipe()) {
       this.recipeService.putRecipe(this.recipe).subscribe((recipe: Recipe) => {
         this.router.navigate(['/recipe/form/' + recipe.id]);
