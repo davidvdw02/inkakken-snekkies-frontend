@@ -11,7 +11,10 @@
         </div>
     </div>
 
-    <button type="button" class="bg-gray-600 text-white py-2 px-4 rounded-lg mt-4 mr-2" (click)="addMore()">Add More Pictures</button>
-    <button type="button" class="bg-gray-600 text-white py-2 px-4 rounded-lg mt-4 mr-2" (click)="removeLast()">Remove last picture</button>
+    <ng-container *ngIf="recipe.recipePictures != undefined; ">
+        <div *ngFor="let picture of recipe.recipePictures; let i = index">
+            <img [src]="'http://localhost:8080/'+ recipe.recipePictures[i].pictureReference" class="w-full h-1/">
+        </div>
+    </ng-container>
     <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-lg mt-4">Next</button>
 </form>

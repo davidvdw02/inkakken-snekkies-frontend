@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { RecipeService } from '../recipe.service';
 import { ActivatedRoute } from '@angular/router';
 import { Recipe } from 'src/app/models/recipe.model';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { RecipeFormService } from './recipe-form.service';
 import { NewPictureDto } from 'src/app/models/new.picture.dto.model';
+import { RecipePicture } from 'src/app/models/recipe_picture.model';
 
 @Component({
   selector: 'app-recipe-form',
@@ -18,12 +19,14 @@ export class RecipeFormComponent {
   constructor(private recipeService: RecipeService, 
               private activatedRoute: ActivatedRoute, 
               private formBuilder: FormBuilder, 
-              private recipeFormService: RecipeFormService) { }
+              private recipeFormService: RecipeFormService,
+              private cdr: ChangeDetectorRef) { }
 
   ngOnInit(): void { 
     this.activatedRoute.params.subscribe((params) => {
       this.recipeService.getRecipe(params['id']).subscribe((data: any) => {
         this.recipe = data;
+        console.log(this.recipe)
         this.initForm();
       }); 
     });
@@ -37,21 +40,18 @@ export class RecipeFormComponent {
     });
   }
 
-  addMore(): void {
-    const pictures = this.recipeForm.get('recipePictures') as FormArray;
-    pictures.push(this.createPicturesGroup());
-  }
-
-  removeLast(): void {
-    const pictures = this.recipeForm.get('recipePictures') as FormArray;
-    pictures.removeAt(pictures.length - 1);
-  }
 
   getRecipePicturesControls(): AbstractControl[] {
     return (this.recipeForm.get('recipePictures') as FormArray).controls;
   }
 
   submitChanges() {
+  }
+    addImageOnce(data: any) {
+    setTimeout(() => {
+      this.cdr.detectChanges();
+      this.recipe.recipePictures?.push(data);
+    }, 1000); // Wait for 1 second (1000 milliseconds) before refreshing
   }
 
   createPicturesGroup(): FormGroup {
@@ -70,10 +70,9 @@ export class RecipeFormComponent {
         picture: base64Data
       }
       this.recipeFormService.uploadImage(newImageDTO).subscribe(
-        (data) => {
-          this.recipe.recipePictures?.push(data);
+        (data: RecipePicture) => { 
           console.log(data);
-          console.log(this.recipe)
+          this.addImageOnce(data)
         }
       );
     };
