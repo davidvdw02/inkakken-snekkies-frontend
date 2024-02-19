@@ -33,6 +33,10 @@ export class RecipeFormComponent {
     const pictures = this.recipeForm.get('recipePictures') as FormArray;
     pictures.push(this.createPicturesGroup());
   }
+  removeLast(): void {
+    const pictures = this.recipeForm.get('recipePictures') as FormArray;
+    pictures.removeAt(pictures.length - 1);
+  }
   
   getRecipePicturesControls(): AbstractControl[] {
     return (this.recipeForm.get('recipePictures') as FormArray).controls;
