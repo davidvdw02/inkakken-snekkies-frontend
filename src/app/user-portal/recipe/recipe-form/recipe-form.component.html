@@ -7,11 +7,11 @@
     <div formArrayName="recipePictures">
         <div *ngFor="let picture of getRecipePicturesControls(); let i = index" [formGroupName]="i" class="mb-4">
             <label for="picture" class="block text-gray-700 font-bold mb-2">Upload Picture:</label>
-            <input type="file" formControlName="picture" class="border rounded-lg py-2 px-4 w-full" />
+            <input type="file" [formControlName]="'picture'" class="border rounded-lg py-2 px-4 w-full" (change)="onPictureSelected($event, i)" />
         </div>
     </div>
 
     <button type="button" class="bg-gray-600 text-white py-2 px-4 rounded-lg mt-4 mr-2" (click)="addMore()">Add More Pictures</button>
     <button type="button" class="bg-gray-600 text-white py-2 px-4 rounded-lg mt-4 mr-2" (click)="removeLast()">Remove last picture</button>
-    <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-lg mt-4">Submit</button>
+    <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-lg mt-4">Next</button>
 </form>
