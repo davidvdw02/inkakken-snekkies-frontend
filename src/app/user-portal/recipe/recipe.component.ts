@@ -34,8 +34,7 @@ export class RecipeComponent {
       this.recipeService.getRecipe(params['id']).subscribe((data) => {
         this.recipe = data as Recipe;
         if(this.recipe.duration !== undefined && this.recipe.duration !== null){
-          //from seconds to ms
-          this.elapsedTime = this.recipe.duration* 1000;
+          this.elapsedTime = this.recipe.duration;
           this.updateTimerDisplay();
         }
         if(this.recipe.deviatedIngredients){
@@ -52,7 +51,7 @@ export class RecipeComponent {
   }
 
   startTimer() {
-    if (!this.timerRunning) {
+    if (!this.timerRunning && this.elapsedTime === 0) {
       this.startTime = Date.now();
       this.timerInterval = setInterval(() => {
         this.elapsedTime = Date.now() - this.startTime;
