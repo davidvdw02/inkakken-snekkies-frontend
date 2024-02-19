@@ -35,7 +35,6 @@ export class OnlineRecipeComponent {
         })
       )
       .subscribe((data) => {
-        console.log(data)
         this.router.navigate(['/recipe/id', data.id]);
       });
       return;

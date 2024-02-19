@@ -25,7 +25,6 @@ export class RecipeFormComponent {
     this.activatedRoute.params.subscribe((params) => {
       this.recipeService.getRecipe(params['id']).subscribe((data: any) => {
         this.recipe = data;
-        console.log(this.recipe)
         this.initForm();
       }); 
     });
@@ -72,7 +71,6 @@ export class RecipeFormComponent {
       }
       this.recipeFormService.uploadImage(newImageDTO).subscribe(
         (data: RecipePicture) => { 
-          console.log(data);
           this.addImageOnce(data)
         }
       );
