@@ -110,9 +110,7 @@ export class RecipeComponent {
   next() {
     if (this.validateRecipe()) {
       this.recipeService.putRecipe(this.recipe).subscribe((recipe: Recipe) => {
-        this.router.navigate(['/recipe/form/' + recipe.id]);
-
-        if (this.deviations.length > 0) {
+        if (this.deviations.length !== (this.recipe.deviatedIngredients?.length || 0)) {
           forkJoin(
             this.deviations
               .filter((deviation) => deviation.id === undefined)
@@ -121,8 +119,12 @@ export class RecipeComponent {
             this.recipe.deviatedIngredients = (
               this.recipe.deviatedIngredients || []
             ).concat(deviationDataArray);
-            this.recipeService.putRecipe(this.recipe).subscribe();
+            this.recipeService.putRecipe(this.recipe).subscribe(() => {
+              this.router.navigate(['/recipe/form/' + recipe.id]);
+            });
           });
+        } else {
+          this.router.navigate(['/recipe/form/' + recipe.id]);
         }
       });
     }
