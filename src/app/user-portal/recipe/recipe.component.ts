@@ -71,11 +71,13 @@ export class RecipeComponent {
     this.recipeService.putRecipe(this.recipe).subscribe();
   }
   addDeviation() {
-    this.deviations.push({
+    const updatedDeviations = [...this.deviations];
+    updatedDeviations.push({
       product: '',
       amount: undefined,
       addedOrSubstracted: true,
     });
+    this.deviations = updatedDeviations;
   }
 
   pauseTimer() {
@@ -98,8 +100,12 @@ export class RecipeComponent {
   }
 
   onDeviationChange(deviation: DeviatedIngredient, index: number) {
-    this.deviations[index] = deviation;
+
+    const updatedDeviations = [...this.deviations];
+    updatedDeviations[index] = deviation;
+    this.deviations = updatedDeviations;
   }
+  
 
   next() {
     if (this.validateRecipe()) {
