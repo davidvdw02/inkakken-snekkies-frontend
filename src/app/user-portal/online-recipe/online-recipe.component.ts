@@ -21,8 +21,8 @@ export class OnlineRecipeComponent {
     this.activatedRoute.params.subscribe((params) => {
       this.onlineRecipeService.getOnlineRecipe(params['id']).subscribe((response: OnlineRecipe) => {
         this.onlineRecipe = response;
-        this.movienighId = params['id'];
       });
+      this.movienighId = params['id'];
     });
   
   }
@@ -40,7 +40,7 @@ export class OnlineRecipeComponent {
       });
       return;
   }
-  //get the recipe id from the online recipe
+
   this.onlineRecipeService.getRecipeByOnlineRecipe(this.onlineRecipe.id).subscribe((data) => {
     this.router.navigate(['/recipe/id', data.id]);
   });
