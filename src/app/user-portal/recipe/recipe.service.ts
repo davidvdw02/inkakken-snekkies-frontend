@@ -10,7 +10,7 @@ export class RecipeService {
   constructor(private http: HttpClient) { }
 
   putRecipe(recipe: Recipe) {
-    return this.http.post('http://localhost:8080/recipe', recipe);
+    return this.http.put('http://localhost:8080/recipe/'+recipe.id, recipe);
   }
 
   postDeviation(deviation: any) {

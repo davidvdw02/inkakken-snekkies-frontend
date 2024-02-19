@@ -23,13 +23,26 @@ export class RecipeComponent {
   seconds: number = 0;
   error: string = '';
 
-  constructor(private activatedRoute: ActivatedRoute, private recipeService: RecipeService, private router: Router) {}
+  constructor(
+    private activatedRoute: ActivatedRoute,
+    private recipeService: RecipeService,
+    private router: Router
+  ) {}
 
   ngOnInit() {
     this.activatedRoute.params.subscribe((params) => {
-      this.recipe.onlineRecipeId = params['id'];
+      this.recipeService.getRecipe(params['id']).subscribe((data) => {
+        this.recipe = data as Recipe;
+        if(this.recipe.duration !== undefined && this.recipe.duration !== null){
+          //from seconds to ms
+          this.elapsedTime = this.recipe.duration* 1000;
+          this.updateTimerDisplay();
+        }
+        if(this.recipe.deviatedIngredients){
+          this.deviations = this.recipe.deviatedIngredients;
+        }
+      });
     });
-    
   }
 
   resetTimer() {
@@ -47,17 +60,23 @@ export class RecipeComponent {
       }, 1000);
       this.timerRunning = true;
       this.recipe.startTime = new Date();
-      this.recipeService.putRecipe(this.recipe).subscribe();
+      this.recipeService
+        .putRecipe(this.recipe)
+        .subscribe((data) => console.log(data));
     }
   }
 
   saveTime() {
     this.pauseTimer();
     this.recipe.duration = this.elapsedTime;
-    this.recipeService.postRecipe(this.recipe).subscribe();
+    this.recipeService.putRecipe(this.recipe).subscribe();
   }
   addDeviation() {
-    this.deviations.push({product: '', amount: undefined, addedOrSubstracted: true});
+    this.deviations.push({
+      product: '',
+      amount: undefined,
+      addedOrSubstracted: true,
+    });
   }
 
   pauseTimer() {
@@ -76,54 +95,58 @@ export class RecipeComponent {
   }
 
   onDeviationDelete(index: number) {
-      this.deviations.splice(index, 1);
+    this.deviations.splice(index, 1);
   }
 
   onDeviationChange(deviation: DeviatedIngredient, index: number) {
     this.deviations[index] = deviation;
-    console.log(this.deviations)
+    console.log(this.deviations);
   }
 
   next() {
-    console.log(this.recipe)
+    console.log(this.recipe);
     if (this.validateRecipe()) {
-      this.recipeService.postRecipe(this.recipe).subscribe((recipe: Recipe) => {
-
+      this.recipeService.putRecipe(this.recipe).subscribe((recipe: Recipe) => {
         this.router.navigate(['/recipe/form/' + recipe.id]);
-  
+
         if (this.deviations.length > 0) {
           forkJoin(
             this.deviations
-              .filter(deviation => deviation.id === undefined)
-              .map(deviation => this.recipeService.postDeviation(deviation))
-          )
-          .subscribe(deviationDataArray => {
-            this.recipe.deviatedIngredients = (this.recipe.deviatedIngredients || []).concat(deviationDataArray);
-            this.recipeService.postRecipe(this.recipe).subscribe();
+              .filter((deviation) => deviation.id === undefined)
+              .map((deviation) => this.recipeService.postDeviation(deviation))
+          ).subscribe((deviationDataArray) => {
+            this.recipe.deviatedIngredients = (
+              this.recipe.deviatedIngredients || []
+            ).concat(deviationDataArray);
+            this.recipeService.putRecipe(this.recipe).subscribe();
           });
         }
       });
     }
   }
-    
-    validateRecipe(): boolean {
-      if (!this.recipe.startTime || !this.recipe.duration) {
-        this.error = "Start time and duration are required.";
-        return false;
-      }
-      this.error = '';
-      
-      if (this.deviations) {
-        for (let i = 0; i < this.deviations.length; i++) {
-          const deviation = this.deviations[i];
-          if (!deviation.product || !deviation.amount || !deviation.addedOrSubstracted === undefined) {
-           this.error = `Deviated ingredient is missing required fields.`;
-            return false;
-          }
+
+  validateRecipe(): boolean {
+    if (!this.recipe.startTime || !this.recipe.duration) {
+      this.error = 'Start time and duration are required.';
+      return false;
+    }
+    this.error = '';
+
+    if (this.deviations) {
+      for (let i = 0; i < this.deviations.length; i++) {
+        const deviation = this.deviations[i];
+        if (
+          !deviation.product ||
+          !deviation.amount ||
+          !deviation.addedOrSubstracted === undefined
+        ) {
+          this.error = `Deviated ingredient is missing required fields.`;
+          return false;
         }
       }
-      this.error = '';
-
-      return true;
     }
+    this.error = '';
+
+    return true;
+  }
 }
