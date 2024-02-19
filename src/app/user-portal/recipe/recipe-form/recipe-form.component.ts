@@ -45,13 +45,10 @@ export class RecipeFormComponent {
     return (this.recipeForm.get('recipePictures') as FormArray).controls;
   }
 
-  submitChanges() {
-  }
     addImageOnce(data: any) {
     setTimeout(() => {
-      this.cdr.detectChanges();
       this.recipe.recipePictures?.push(data);
-    }, 1000); // Wait for 1 second (1000 milliseconds) before refreshing
+    }, 1000);
   }
 
   createPicturesGroup(): FormGroup {
@@ -59,7 +56,12 @@ export class RecipeFormComponent {
       'picture': ['']
     });
   }
-  onPictureSelected(event: any, index: number) {
+
+  onGradeChange(event: any) {
+    this.recipe.grade = event.target.value;
+    this.recipeService.putRecipe(this.recipe).subscribe();
+  }
+  onPictureSelected(event: any) {
     const file: File = event.target.files[0];
     const reader = new FileReader();
     
