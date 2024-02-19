@@ -16,9 +16,11 @@ export class RecipeFormComponent {
   constructor(private recipeService: RecipeService, private activatedRoute: ActivatedRoute, private formBuilder: FormBuilder, private recipeFormService: RecipeFormService) { }
   ngOnInit(): void { 
     this.activatedRoute.params.subscribe((params) => {
-       this.recipeService.getRecipe(params['id']).subscribe((data: any) => {console.log(data)}); 
+       this.recipeService.getRecipe(params['id']).subscribe((data: any) => {this.recipe = data;
+        this.initForm();
+      }); 
+      this.initForm();
     });
-    this.initForm();
   }
 
 
@@ -43,10 +45,9 @@ export class RecipeFormComponent {
   }
 
   submitChanges() {
-    for(let picture of this.recipeForm.value.recipePictures) {
-    this.recipeFormService.postAndTurnPictureToBase64(picture)
-  }
+    this.recipeFormService.putRecipeWithPictures(this.recipe, this.recipeForm.value.recipePictures);
 }
+
   createPicturesGroup(): FormGroup {
     return new FormGroup({
       'picture': new FormControl(''),

@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Recipe } from 'src/app/models/recipe.model';
 
 @Injectable({
     providedIn: 'root'
@@ -8,14 +9,10 @@ export class RecipeFormService {
     constructor(private http: HttpClient) { 
 }
 
-    postAndTurnPictureToBase64(picture:any){
-        const base64Picture = this.turnTo64(picture)
-        this.postPicture(picture)
+    putRecipeWithPictures(recipe: Recipe, pictures: any) {
+        console.log(pictures, recipe)
     }
-    private postPicture(picture: string) {
-        console.log(picture)
-    this.http.post('http://localhost:8080/recipepicture', {picture: picture}).subscribe(data => console.log(data));
-    }
+
 
     private turnTo64(picture: any):string {
         const reader = new FileReader();
@@ -24,4 +21,5 @@ export class RecipeFormService {
         }
         return '';
     }
+
 }
