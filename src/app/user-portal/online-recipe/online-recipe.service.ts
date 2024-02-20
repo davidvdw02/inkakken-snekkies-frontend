@@ -2,29 +2,36 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { OnlineRecipe } from 'src/app/models/online-recipe.model';
 import { Recipe } from 'src/app/models/recipe.model';
+import { environment } from '../../../environments/environment';
 @Injectable({
   providedIn: 'root'
 })
 export class OnlineRecipeService {
+  private apiUrl: string;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) { 
+    this.apiUrl = environment.apiUrl;
+  }
 
   createOnlineRecipe (onlineRecipe: OnlineRecipe) {
-    return this.http.post<OnlineRecipe>('http://localhost:8080/onlinerecipe', onlineRecipe);
+    return this.http.post<OnlineRecipe>(this.apiUrl+'onlinerecipe', onlineRecipe);
   }
 
   getOnlineRecipe (id: string) { 
-    return this.http.get<OnlineRecipe>('http://localhost:8080/recipe/onlinerecipe/' + id);
+    return this.http.get<OnlineRecipe>(this.apiUrl+'recipe/onlinerecipe/' + id);
   }
   createRecipe(onlineRecipe: OnlineRecipe,  MovienighId: string) {
     const recipe: Recipe = {
       onlineRecipeId: onlineRecipe.id,
       movieNightId: MovienighId
     };
-    return this.http.post<OnlineRecipe>('http://localhost:8080/recipe', recipe);
+    return this.http.post<OnlineRecipe>(this.apiUrl+'recipe', recipe);
   }
 
   getRecipeByOnlineRecipe(onlineRecipeId: string){
-    return this.http.get<Recipe>('http://localhost:8080/recipe/recipe/' + onlineRecipeId);
+    return this.http.get<Recipe>(this.apiUrl+'recipe/recipe/' + onlineRecipeId);
+  }
+  getAllIngredients() {
+    return this.http.get(this.apiUrl+'ingredient');
   }
 }

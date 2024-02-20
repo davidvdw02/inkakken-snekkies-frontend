@@ -3,32 +3,36 @@ import { Injectable } from '@angular/core';
 import { DeviatedIngredient } from 'src/app/models/deviated-ingredient.model';
 import { Ingredient } from 'src/app/models/ingredient.model';
 import { Recipe } from 'src/app/models/recipe.model';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class RecipeService {
+  private apiUrl: string;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {
+    this.apiUrl = environment.apiUrl;
+   }
 
   putRecipe(recipe: Recipe) {
-    return this.http.put('http://localhost:8080/recipe/'+recipe.id, recipe);
+    return this.http.put(this.apiUrl+'recipe/'+recipe.id, recipe);
   }
 
   postDeviation(deviation: DeviatedIngredient) {
-    return this.http.post('http://localhost:8080/deviatedingredient', deviation);
+    return this.http.post(this.apiUrl+'deviatedingredient', deviation);
   }
 
   postIngredient(ingredient: Ingredient){
-    return this.http.post('http://localhost:8080/ingredient', ingredient);
+    return this.http.post(this.apiUrl+'ingredient', ingredient);
   }
 
   getRecipe(id: string) {
-    return this.http.get('http://localhost:8080/recipe/' + id);
+    return this.http.get(this.apiUrl+'recipe/' + id);
   }
 
   getIngredients() {
-    return this.http.get('http://localhost:8080/ingredient');
+    return this.http.get(this.apiUrl+'ingredient');
   }
 
 

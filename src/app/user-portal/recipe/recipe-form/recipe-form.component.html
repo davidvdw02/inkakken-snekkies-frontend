@@ -13,7 +13,7 @@
 
     <ng-container *ngIf="recipe.recipePictures != undefined; ">
         <div *ngFor="let picture of recipe.recipePictures; let i = index">
-            <img [src]="'http://localhost:8080/'+ recipe.recipePictures[i].pictureReference" class="w-full h-1/">
+            <img [src]="apiUrl+ recipe.recipePictures[i].pictureReference" class="w-full h-1/">
         </div>
     </ng-container>
     <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-lg mt-4">Next</button>

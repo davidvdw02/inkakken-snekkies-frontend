@@ -6,6 +6,7 @@ import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup } from 
 import { RecipeFormService } from './recipe-form.service';
 import { NewPictureDto } from 'src/app/models/new.picture.dto.model';
 import { RecipePicture } from 'src/app/models/recipe_picture.model';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-recipe-form',
@@ -13,13 +14,16 @@ import { RecipePicture } from 'src/app/models/recipe_picture.model';
   styleUrls: ['./recipe-form.component.scss']
 })
 export class RecipeFormComponent {
+  apiUrl: string;
   recipeForm!: FormGroup;
   recipe: Recipe = {};
 
   constructor(private recipeService: RecipeService, 
               private activatedRoute: ActivatedRoute, 
               private formBuilder: FormBuilder, 
-              private recipeFormService: RecipeFormService) { }
+              private recipeFormService: RecipeFormService) { 
+                this.apiUrl = environment.apiUrl;
+              }
 
   ngOnInit(): void { 
     this.activatedRoute.params.subscribe((params) => {
