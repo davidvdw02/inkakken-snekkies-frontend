@@ -152,7 +152,7 @@ export class RecipeComponent {
     }
 
     forkJoin(deviationObservables).subscribe((deviations: any[]) => {
-      this.recipe.deviatedIngredients?.forEach((deviation, index) => {
+      this.deviations.forEach((deviation, index) => {
         if (deviation.id === undefined) {
           const updatedDeviation = deviations.find(
             (newDeviation) =>

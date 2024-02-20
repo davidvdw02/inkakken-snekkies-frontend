@@ -3,6 +3,7 @@ import { OnlineRecipe } from 'src/app/models/online-recipe.model';
 import { OnlineRecipeService } from './online-recipe.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { flatMap } from 'rxjs';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-online-recipe',
@@ -10,12 +11,15 @@ import { flatMap } from 'rxjs';
   styleUrls: ['./online-recipe.component.scss'],
 })
 export class OnlineRecipeComponent {
+  apiUrl: string;
   onlineRecipe: OnlineRecipe = {
     link: '',
     duration: undefined,
   };
   movienighId: string = '';
-  constructor(private onlineRecipeService: OnlineRecipeService, private router: Router, private activatedRoute: ActivatedRoute) {}
+  constructor(private onlineRecipeService: OnlineRecipeService, private router: Router, private activatedRoute: ActivatedRoute) {
+    this.apiUrl = environment.apiUrl;
+  }
 
   ngOnInit() {
     this.activatedRoute.params.subscribe((params) => {
