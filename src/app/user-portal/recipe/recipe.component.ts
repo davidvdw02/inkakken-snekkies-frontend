@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Recipe } from 'src/app/models/recipe.model';
 import { RecipeService } from './recipe.service';
-import { DeviatedIngredient } from 'src/app/models/deviated-ingredient.model';
-import { forkJoin, tap } from 'rxjs';
+import { forkJoin } from 'rxjs';
 import { Ingredient } from 'src/app/models/ingredient.model';
+import { DeviatedIngredient } from 'src/app/models/deviated-ingredient.model';
 
 @Component({
   selector: 'app-recipe',
@@ -80,16 +80,6 @@ export class RecipeComponent {
     this.recipe.duration = this.elapsedTime;
     this.recipeService.putRecipe(this.recipe).subscribe();
   }
-  addDeviation() {
-    const updatedDeviations = [...this.deviations];
-    updatedDeviations.push({
-      ingredient: {},
-      amount: undefined,
-      addedOrSubstracted: false,
-      accident: false,
-    });
-    this.deviations = updatedDeviations;
-  }
 
   pauseTimer() {
     clearInterval(this.timerInterval);
@@ -106,32 +96,51 @@ export class RecipeComponent {
     return value < 10 ? `0${value}` : `${value}`;
   }
 
-  onDeviationDelete(index: number) {
-    this.deviations.splice(index, 1);
-  }
-
   onDeviationChange(deviation: DeviatedIngredient, index: number) {
-    const updatedDeviations = [...this.deviations];
-    updatedDeviations[index] = deviation;
-    this.deviations = updatedDeviations;
+    if (deviation.id !== undefined) {
+      this.recipeService
+        .postIngredient(deviation.ingredient)
+        .subscribe((data) => {
+          this.deviations[index].ingredient = data as Ingredient;
+          this.recipeService
+            .postDeviation(deviation)
+            .subscribe(
+              (data) => (this.deviations[index] = data as DeviatedIngredient)
+            );
+        });
+    } else {
+      this.deviations[index] = deviation;
+    }
   }
 
   postIngredientsAndDeviations() {
     const ingredientObservables = [];
-    
-    for (let deviation of this.deviations) {
-      if (deviation.ingredient.id === undefined) {
-        const ingredientObservable = this.recipeService.postIngredient(deviation.ingredient);
+
+    for (let i = 0; i < this.deviations.length; i++) {
+      if (
+        (this.deviations[i].ingredient.id === undefined)
+      ) {
+        const ingredientObservable = this.recipeService.postIngredient(
+          this.deviations[i].ingredient
+        );
         ingredientObservables.push(ingredientObservable);
       }
     }
-  
+    if(ingredientObservables.length === 0) {
+      this.router.navigate(['/recipe/form/' + this.recipe.id]);
+    }
+
     forkJoin(ingredientObservables).subscribe((ingredients: any[]) => {
-      this.deviations.map(deviation => deviation.ingredient = ingredients.find(ingredient => ingredient.name === deviation.ingredient.name));
+      this.deviations.map(
+        (deviation) =>
+          (deviation.ingredient = ingredients.find(
+            (ingredient) => ingredient.name === deviation.ingredient.name
+          ))
+      );
       this.postDeviations();
     });
   }
-  
+
   postDeviations() {
     const deviationObservables = [];
 
@@ -141,30 +150,31 @@ export class RecipeComponent {
         deviationObservables.push(deviationObservable);
       }
     }
-  
+
     forkJoin(deviationObservables).subscribe((deviations: any[]) => {
-      this.recipe.deviatedIngredients?.push(...deviations);
-     this.postRecipe();
+      this.recipe.deviatedIngredients?.forEach((deviation, index) => {
+        if (deviation.id === undefined) {
+          const updatedDeviation = deviations.find(
+            (newDeviation) =>
+              newDeviation.ingredient.name === deviation.ingredient.name
+          );
+          if (updatedDeviation) {
+            this.recipe.deviatedIngredients![index] = updatedDeviation;
+          }
+        }
+      });
+      this.postRecipe();
     });
   }
-  postRecipe(){
-    this.recipeService.putRecipe(this.recipe).subscribe(
-      (data) => {
-        this.router.navigate(['/recipe/form/' + this.recipe.id]);
-      }
-    );
+  postRecipe() {
+    this.recipeService.putRecipe(this.recipe).subscribe((data) => {
+      this.router.navigate(['/recipe/form/' + this.recipe.id]);
+    });
   }
 
   async next() {
     if (this.validateRecipe()) {
-      if (
-        this.deviations.length !==
-        (this.recipe.deviatedIngredients?.length || 0)
-      ) {
-        this.postIngredientsAndDeviations();
-      }else{
-        this.router.navigate(['/recipe/form/' + this.recipe.id]);
-      }
+      this.postIngredientsAndDeviations();
     }
   }
 
@@ -181,7 +191,7 @@ export class RecipeComponent {
         if (
           !deviation.ingredient ||
           !deviation.amount ||
-          !deviation.addedOrSubstracted === undefined
+          deviation.addedOrSubstracted === undefined
         ) {
           this.error = `Deviated ingredient is missing required fields.`;
           return false;
@@ -191,5 +201,15 @@ export class RecipeComponent {
     this.error = '';
 
     return true;
+  }
+
+  // Method to add a new deviation
+  addDeviation() {
+    this.deviations.push({
+      ingredient: {},
+      amount: undefined,
+      addedOrSubstracted: false,
+      accident: false,
+    });
   }
 }
