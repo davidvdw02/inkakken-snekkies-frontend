@@ -85,7 +85,8 @@ export class RecipeComponent {
     updatedDeviations.push({
       ingredient: {},
       amount: undefined,
-      addedOrSubstracted: true,
+      addedOrSubstracted: false,
+      accident: false,
     });
     this.deviations = updatedDeviations;
   }
