@@ -3,6 +3,7 @@ import {CommonModule} from '@angular/common';
 import {UserPortalComponent} from "./user-portal.component";
 import {RouterModule, Routes} from "@angular/router";
 import {MovieNightModule} from "./movie-night/movie-night.module";
+import { OnlineRecipeComponent } from './online-recipe/online-recipe.component';
 
 const userPortalRoutes: Routes = [
   {
@@ -12,11 +13,18 @@ const userPortalRoutes: Routes = [
     path: 'movienight', loadChildren: () => import('./movie-night/movie-night.module')
       .then((m) => m.MovieNightModule)
   },
+  {
+    path: 'onlinerecipe/id/:id', component: OnlineRecipeComponent,
+  },
+  {
+    path: 'recipe', loadChildren: () => import('./recipe/recipe.module')
+      .then((m) => m.RecipeModule)
+  },
 ]
 
 @NgModule({
   declarations: [
-    UserPortalComponent
+    UserPortalComponent,
   ],
   imports: [
     CommonModule,

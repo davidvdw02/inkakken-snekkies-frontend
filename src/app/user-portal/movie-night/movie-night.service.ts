@@ -1,16 +1,19 @@
 import { Injectable } from '@angular/core';
-import {MovieNight} from "../../models/movie-night.model";
 import {HttpClient} from "@angular/common/http";
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MovieNightService {
 
-  constructor(private http: HttpClient) { }
+  private apiUrl: string;
+  constructor(private http: HttpClient) { 
+    this.apiUrl = environment.apiUrl;
+  }
 
 
   addNewMovieNight(): any{
-    return this.http.post("http://localhost:8080/movienight", {});
+    return this.http.post(this.apiUrl+"movienight", {});
   }
 }

@@ -5,6 +5,8 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {UserPortalModule} from "./user-portal/user-portal.module";
 import {AdminPortalModule} from "./admin-portal/admin-portal.module";
+import { OnlineRecipeModule } from './user-portal/online-recipe/online-recipe.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -14,7 +16,9 @@ import {AdminPortalModule} from "./admin-portal/admin-portal.module";
     UserPortalModule,
     AdminPortalModule,
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    OnlineRecipeModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

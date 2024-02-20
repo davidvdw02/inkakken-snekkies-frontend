@@ -1,6 +1,9 @@
+import { Ingredient } from "./ingredient.model";
+
 export type DeviatedIngredient = {
-  id: string;
-  product: string;
-  amount: number;
-  addedOrSubstracted: boolean;
+  id?: string;
+  amount?: number;
+  addedOrSubstracted?: boolean;
+  accident?: boolean;
+  ingredient: Ingredient;
 }

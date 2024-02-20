@@ -1,0 +1,97 @@
+<div class="items-center mt-4">
+  <form class="flex flex-row" [formGroup]="deviationForm" (ngSubmit)="submitChanges()">
+    <div class="flex flex-col mr-4">
+      <label for="ingredient" class="mb-1">Ingredient</label>
+      <input
+      type="text"
+      id="ingredient"
+      formControlName="ingredient"
+      class="border rounded py-2 px-3"
+      (change)="submitChanges()"
+      (input)="filterIngredientOptions($event)"
+      [matAutocomplete]="auto"
+    />
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let option of filteredIngrediontOptions" [value]="option">
+        {{ option }}
+      </mat-option>
+    </mat-autocomplete>
+      <div
+        *ngIf="
+          deviationForm.get('ingredient')?.invalid &&
+          (deviationForm.get('ingredient')?.dirty ||
+            deviationForm.get('ingredient')?.touched)
+        "
+      >
+        <span
+          class="text-red-500"
+          *ngIf="deviationForm.get('ingredient')?.errors?.['required']"
+          >ingredient is required.</span
+        >
+        <span
+          class="text-red-500"
+          *ngIf="deviationForm.get('ingredient')?.errors?.['pattern']"
+          >Please enter a valid ingredient name (no special characters).</span
+        >
+      </div>
+    </div>
+
+    <div class="flex flex-col mr-4">
+      <label for="amount" class="mb-1">Amount</label>
+      <input
+        type="text"
+        id="amount"
+        formControlName="amount"
+        class="border rounded py-2 px-3"
+        (change)="submitChanges()"
+      />
+      <div
+        *ngIf="
+          deviationForm.get('amount')?.invalid &&
+          (deviationForm.get('amount')?.dirty ||
+            deviationForm.get('amount')?.touched)
+        "
+      >
+        <span
+          class="text-red-500"
+          *ngIf="deviationForm.get('amount')?.errors?.['required']"
+          >Amount is required.</span
+        >
+        <span
+          class="text-red-500"
+          *ngIf="deviationForm.get('amount')?.errors?.['pattern']"
+          >Please enter a valid number for the amount.</span
+        >
+      </div>
+    </div>
+
+    <div class = "space-between">
+    <div class="flex flex-col">
+      <label for="addedOrSubstracted" class="mb-1">Added</label>
+      <input
+        type="checkbox"
+        id="addedOrSubstracted"
+        formControlName="addedOrSubstracted"
+        (change)="submitChanges()"
+      />
+    </div>
+
+    <div class="flex flex-col">
+      <label for="accident" class="mb-1">Accident</label>
+      <input
+        type="checkbox"
+        id="accident"
+        formControlName="accident"
+        (change)="submitChanges()"
+      />
+    </div>
+  </div>
+
+    <button
+      class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded ml-2"
+      (click)="deleteDeviation()"
+    >
+      &#10006; Delete
+    </button>
+  </form>
+</div>

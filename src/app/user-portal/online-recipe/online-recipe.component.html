@@ -1,0 +1,61 @@
+<form class="max-w-md mx-auto" #recipeForm="ngForm" (ngSubmit)="onSubmit()">
+  <div class="mb-4">
+    <label class="block text-gray-700 text-sm font-bold mb-2" for="name">Name</label>
+    <input
+      name="name"
+      id="name"
+      class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+      type="text"
+      placeholder="Enter name"
+      [(ngModel)]="onlineRecipe.name"
+      required
+    />
+    <div *ngIf="recipeForm.controls['name'] && (recipeForm.controls['name'].invalid && (recipeForm.controls['name'].dirty || recipeForm.controls['name'].touched))">
+      <span class="text-red-500" *ngIf="recipeForm.controls['name'].errors?.['required']">Name is required.</span>
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <label class="block text-gray-700 text-sm font-bold mb-2" for="title">Link</label>
+    <input
+      name="link"
+      id="title"
+      class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+      type="text"
+      placeholder="Enter link"
+      [(ngModel)]="onlineRecipe.link"
+      required
+      pattern="https?://(www\.)?[a-zA-Z0-9-]+\.[a-zA-Z]{2,}(\/[^\s]*)?$"
+    />
+    <div *ngIf="recipeForm.controls['link'] && (recipeForm.controls['link'].invalid && (recipeForm.controls['link'].dirty || recipeForm.controls['link'].touched))">
+      <span class="text-red-500" *ngIf="recipeForm.controls['link'].errors?.['required']">Link is required.</span>
+      <span class="text-red-500" *ngIf="recipeForm.controls['link'].errors?.['pattern']">Please enter a valid URL.</span>
+    </div>
+  </div>
+
+  <div class="mb-4">
+    <label class="block text-gray-700 text-sm font-bold mb-2" for="duration">Duration</label>
+    <input
+      name="duration"
+      id="duration"
+      class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+      type="text"
+      placeholder="Enter duration (in minutes)"
+      [(ngModel)]="onlineRecipe.duration"
+      required
+      pattern="[0-9]+"
+    />
+    <div *ngIf="recipeForm.controls['duration'] && (recipeForm.controls['duration'].invalid && (recipeForm.controls['duration'].dirty || recipeForm.controls['duration'].touched))">
+      <span class="text-red-500" *ngIf="recipeForm.controls['duration'].errors?.['required']">Duration is required.</span>
+      <span class="text-red-500" *ngIf="recipeForm.controls['duration'].errors?.['pattern']">Please enter a valid number for duration.</span>
+    </div>
+  </div>
+
+  <button
+  class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+  type="submit"
+  [disabled]="!recipeForm.valid"
+>
+  Save
+</button>
+</form>
