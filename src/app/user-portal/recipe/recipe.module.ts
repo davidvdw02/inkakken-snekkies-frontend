@@ -5,6 +5,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { DeviationComponent } from './deviation/deviation.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RecipeFormComponent } from './recipe-form/recipe-form.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete'; 
 const recipeRoutes: Routes = [
   {
     path: 'id/:id', component: RecipeComponent,
@@ -24,7 +25,9 @@ const recipeRoutes: Routes = [
     CommonModule,
     RouterModule.forChild(recipeRoutes),
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatAutocompleteModule,
+    
   ]
 })
 export class RecipeModule { }

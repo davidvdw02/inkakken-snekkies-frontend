@@ -6,6 +6,7 @@ import {AppComponent} from './app.component';
 import {UserPortalModule} from "./user-portal/user-portal.module";
 import {AdminPortalModule} from "./admin-portal/admin-portal.module";
 import { OnlineRecipeModule } from './user-portal/online-recipe/online-recipe.module';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { OnlineRecipeModule } from './user-portal/online-recipe/online-recipe.mo
     AdminPortalModule,
     BrowserModule,
     AppRoutingModule,
-    OnlineRecipeModule
+    OnlineRecipeModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

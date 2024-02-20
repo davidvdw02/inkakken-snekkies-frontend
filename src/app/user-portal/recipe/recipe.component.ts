@@ -4,6 +4,7 @@ import { Recipe } from 'src/app/models/recipe.model';
 import { RecipeService } from './recipe.service';
 import { DeviatedIngredient } from 'src/app/models/deviated-ingredient.model';
 import { forkJoin, tap } from 'rxjs';
+import { Ingredient } from 'src/app/models/ingredient.model';
 
 @Component({
   selector: 'app-recipe',
@@ -11,6 +12,7 @@ import { forkJoin, tap } from 'rxjs';
   styleUrls: ['./recipe.component.scss'],
 })
 export class RecipeComponent {
+  Ingredients: Ingredient[] = [];
   startTime: number = 0;
   elapsedTime: number = 0;
   timerInterval: any;
@@ -48,6 +50,9 @@ export class RecipeComponent {
           this.deviations = this.recipe.deviatedIngredients;
         }
       });
+    });
+    this.recipeService.getIngredients().subscribe((data) => {
+      this.Ingredients = data as Ingredient[];
     });
   }
 

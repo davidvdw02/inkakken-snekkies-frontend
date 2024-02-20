@@ -27,6 +27,10 @@ export class RecipeService {
     return this.http.get('http://localhost:8080/recipe/' + id);
   }
 
+  getIngredients() {
+    return this.http.get('http://localhost:8080/ingredient');
+  }
+
 
 
 }

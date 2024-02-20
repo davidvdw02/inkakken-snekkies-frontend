@@ -3,12 +3,19 @@
     <div class="flex flex-col mr-4">
       <label for="ingredient" class="mb-1">Ingredient</label>
       <input
-        type="text"
-        id="ingredient"
-        formControlName="ingredient"
-        class="border rounded py-2 px-3"
-        (change)="submitChanges()"
-      />
+      type="text"
+      id="ingredient"
+      formControlName="ingredient"
+      class="border rounded py-2 px-3"
+      (change)="submitChanges()"
+      (input)="filterIngredientOptions($event)"
+      [matAutocomplete]="auto"
+    />
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let option of filteredIngrediontOptions" [value]="option">
+        {{ option }}
+      </mat-option>
+    </mat-autocomplete>
       <div
         *ngIf="
           deviationForm.get('ingredient')?.invalid &&
