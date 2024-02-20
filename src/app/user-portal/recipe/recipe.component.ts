@@ -33,11 +33,18 @@ export class RecipeComponent {
     this.activatedRoute.params.subscribe((params) => {
       this.recipeService.getRecipe(params['id']).subscribe((data) => {
         this.recipe = data as Recipe;
-        if(this.recipe.duration !== undefined && this.recipe.duration !== null){
+        if (
+          this.recipe.duration !== undefined &&
+          this.recipe.duration !== null
+        ) {
           this.elapsedTime = this.recipe.duration;
           this.updateTimerDisplay();
         }
-        if(this.recipe.deviatedIngredients !== undefined && this.recipe.deviatedIngredients !== null && this.recipe.deviatedIngredients.length > 0){
+        if (
+          this.recipe.deviatedIngredients !== undefined &&
+          this.recipe.deviatedIngredients !== null &&
+          this.recipe.deviatedIngredients.length > 0
+        ) {
           this.deviations = this.recipe.deviatedIngredients;
         }
       });
@@ -59,9 +66,7 @@ export class RecipeComponent {
       }, 1000);
       this.timerRunning = true;
       this.recipe.startTime = new Date();
-      this.recipeService
-        .putRecipe(this.recipe)
-        .subscribe();
+      this.recipeService.putRecipe(this.recipe).subscribe();
     }
   }
 
@@ -73,7 +78,7 @@ export class RecipeComponent {
   addDeviation() {
     const updatedDeviations = [...this.deviations];
     updatedDeviations.push({
-      product: '',
+      ingredient: {},
       amount: undefined,
       addedOrSubstracted: true,
     });
@@ -100,33 +105,60 @@ export class RecipeComponent {
   }
 
   onDeviationChange(deviation: DeviatedIngredient, index: number) {
-
     const updatedDeviations = [...this.deviations];
     updatedDeviations[index] = deviation;
     this.deviations = updatedDeviations;
   }
-  
 
-  next() {
+  postIngredientsAndDeviations() {
+    const ingredientObservables = [];
+    
+    for (let deviation of this.deviations) {
+      if (deviation.ingredient.id === undefined) {
+        const ingredientObservable = this.recipeService.postIngredient(deviation.ingredient);
+        ingredientObservables.push(ingredientObservable);
+      }
+    }
+  
+    forkJoin(ingredientObservables).subscribe((ingredients: any[]) => {
+      this.deviations.map(deviation => deviation.ingredient = ingredients.find(ingredient => ingredient.name === deviation.ingredient.name));
+      this.postDeviations();
+    });
+  }
+  
+  postDeviations() {
+    const deviationObservables = [];
+
+    for (let deviation of this.deviations) {
+      if (deviation.id === undefined) {
+        const deviationObservable = this.recipeService.postDeviation(deviation);
+        deviationObservables.push(deviationObservable);
+      }
+    }
+  
+    forkJoin(deviationObservables).subscribe((deviations: any[]) => {
+      this.recipe.deviatedIngredients?.push(...deviations);
+     this.postRecipe();
+    });
+  }
+  postRecipe(){
+    this.recipeService.putRecipe(this.recipe).subscribe(
+      (data) => {
+        this.router.navigate(['/recipe/form/' + this.recipe.id]);
+      }
+    );
+  }
+
+  async next() {
     if (this.validateRecipe()) {
-      this.recipeService.putRecipe(this.recipe).subscribe((recipe: Recipe) => {
-        if (this.deviations.length !== (this.recipe.deviatedIngredients?.length || 0)) {
-          forkJoin(
-            this.deviations
-              .filter((deviation) => deviation.id === undefined)
-              .map((deviation) => this.recipeService.postDeviation(deviation))
-          ).subscribe((deviationDataArray) => {
-            this.recipe.deviatedIngredients = (
-              this.recipe.deviatedIngredients || []
-            ).concat(deviationDataArray);
-            this.recipeService.putRecipe(this.recipe).subscribe(() => {
-              this.router.navigate(['/recipe/form/' + recipe.id]);
-            });
-          });
-        } else {
-          this.router.navigate(['/recipe/form/' + recipe.id]);
-        }
-      });
+      if (
+        this.deviations.length !==
+        (this.recipe.deviatedIngredients?.length || 0)
+      ) {
+        this.postIngredientsAndDeviations();
+      }else{
+        this.router.navigate(['/recipe/form/' + this.recipe.id]);
+      }
     }
   }
 
@@ -141,7 +173,7 @@ export class RecipeComponent {
       for (let i = 0; i < this.deviations.length; i++) {
         const deviation = this.deviations[i];
         if (
-          !deviation.product ||
+          !deviation.ingredient ||
           !deviation.amount ||
           !deviation.addedOrSubstracted === undefined
         ) {

@@ -1,7 +1,9 @@
+import { Ingredient } from './ingredient.model';
+
 export type OnlineRecipe = {
   id?: string;
   link: string;
-  ingredients?: string;
   duration?: number;
   name?: string;
+  ingredients?: Ingredient[];
 }

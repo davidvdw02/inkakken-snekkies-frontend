@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output, OnChanges, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { DeviatedIngredient } from 'src/app/models/deviated-ingredient.model';
 
 @Component({
   selector: 'app-deviation',
@@ -7,7 +8,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./deviation.component.scss']
 })
 export class DeviationComponent implements OnChanges {
-  @Input() deviation: any;
+  @Input() deviation: DeviatedIngredient | undefined;
   @Output() deviationChange = new EventEmitter<any>();
   @Output() onDeviationDelete = new EventEmitter<void>();
   deviationForm!: FormGroup;
@@ -22,16 +23,20 @@ export class DeviationComponent implements OnChanges {
 
   initializeForm(): void {
     this.deviationForm = this.formBuilder.group({
-      product: [this.deviation.product || '', [Validators.required, Validators.pattern('[a-zA-Z\s]+')]],
-      amount: [this.deviation.amount || '', [Validators.required, Validators.pattern('[0-9]+')]],
-      addedOrSubstracted: [this.deviation.addedOrSubstracted || false]
+      ingredient: [this.deviation!.ingredient.name || '', [Validators.required, Validators.pattern('[a-zA-Z\s]+')]],
+      amount: [this.deviation!.amount || '', [Validators.required, Validators.pattern('[0-9]+')]],
+      addedOrSubstracted: [this.deviation!.addedOrSubstracted || false]
     });
   }
 
   submitChanges() {
     if (this.deviationForm.valid) {
-      this.deviation = this.deviationForm.value;
-      this.deviationChange.emit(this.deviation);
+      if (this.deviation) {
+        this.deviation.addedOrSubstracted = this.deviationForm.value.addedOrSubstracted;
+        this.deviation.amount = this.deviationForm.value.amount;
+        this.deviation.ingredient.name = this.deviationForm.value.ingredient;
+        this.deviationChange.emit(this.deviation);
+      }
     }
   }
 
