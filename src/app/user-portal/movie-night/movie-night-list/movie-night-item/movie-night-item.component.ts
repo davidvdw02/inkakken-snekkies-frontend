@@ -14,7 +14,6 @@ export class MovieNightItemComponent {
   constructor(private datePipe: DatePipe) {
   }
 ngOnInit(){
-  console.log(this.movieNight);
   this.formattedDate = this.datePipe.transform(this.movieNight?.date, 'dd-MM-yyy') || '';
 }
 }
