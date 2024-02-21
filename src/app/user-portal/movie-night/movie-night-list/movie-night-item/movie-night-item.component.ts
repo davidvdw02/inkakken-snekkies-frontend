@@ -1,5 +1,6 @@
 import {Component, Input} from '@angular/core';
 import {MovieNight} from "../../../../models/movie-night.model";
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-movie-night-item',
@@ -8,6 +9,11 @@ import {MovieNight} from "../../../../models/movie-night.model";
 })
 export class MovieNightItemComponent {
   @Input() movieNight: MovieNight | null = null;
+  formattedDate = '';
 
-
+  constructor(private datePipe: DatePipe) {
+  }
+ngOnInit(){
+  this.formattedDate = this.datePipe.transform(this.movieNight?.date, 'dd-MM-yyy') || '';
+}
 }
