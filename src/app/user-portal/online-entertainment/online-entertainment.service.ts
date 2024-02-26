@@ -16,4 +16,8 @@ export class OnlineEntertainmentService {
     return this.http.get(this.apiUrl + 'onlineentertainment/movienight/' + movieNightId);
   }
 
+  queryWithoutPage(query: string): any {
+    return this.http.get(this.apiUrl + 'onlineentertainment/query/'+ query);
+  }
+
 }
