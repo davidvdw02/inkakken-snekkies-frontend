@@ -1,6 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import {FormsModule} from "@angular/forms";
+import {FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {RouterModule, Routes} from "@angular/router";
 import {OnlineEntertainmentComponent} from "./online-entertainment.component";
 
@@ -12,11 +12,12 @@ const entertainmentRoutes: Routes = [
 ]
 
 @NgModule({
-  declarations: [],
+  declarations: [OnlineEntertainmentComponent],
   imports: [
     CommonModule,
     FormsModule,
     RouterModule.forChild(entertainmentRoutes),
+    ReactiveFormsModule,
   ]
 })
 export class OnlineEntertainmentModule { }

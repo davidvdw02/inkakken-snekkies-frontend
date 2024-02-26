@@ -4,7 +4,6 @@ import {UserPortalComponent} from "./user-portal.component";
 import {RouterModule, Routes} from "@angular/router";
 import {MovieNightModule} from "./movie-night/movie-night.module";
 import { OnlineRecipeComponent } from './online-recipe/online-recipe.component';
-import { OnlineEntertainmentComponent } from './online-entertainment/online-entertainment.component';
 
 const userPortalRoutes: Routes = [
   {
@@ -30,7 +29,6 @@ const userPortalRoutes: Routes = [
 @NgModule({
   declarations: [
     UserPortalComponent,
-    OnlineEntertainmentComponent,
   ],
   imports: [
     CommonModule,
