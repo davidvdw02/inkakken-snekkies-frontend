@@ -1,11 +1,15 @@
 import {Genre} from "./genre.model";
 
 export type OnlineEntertainment = {
-  id?: string
-  name: string;
+   id?: string;
+  title: string;
   duration: number;
   rating: number;
-  episode: number;
-  link: string;
+  episode?: number | null;
+  posterPath: string;
   genres: Genre[];
-}
+  releaseDate: Date;
+  season?: number | null;
+  episodeTitle?: string | null;
+  stillImagePath?: string | null;
+};

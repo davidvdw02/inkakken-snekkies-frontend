@@ -1,0 +1,21 @@
+<div class="flex items-center justify-between mb-4" (change)="onMediaTypeToggle()">
+    <div class="flex items-center">
+      <input type="text" placeholder="Search" [(ngModel)]="query" class="p-2 border border-gray-300 rounded mr-2 focus:outline-none focus:border-blue-500">
+      <button class="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 focus:outline-none focus:bg-blue-600" (click)="onQuery()">Search</button>
+    </div>
+    <div class="flex items-center">
+      <label class="mr-2">Series</label>
+      <input type="range" min="0" max="1" step="1" [(ngModel)]="isMovies" class="mr-2">
+      <label class="cursor-pointer">Movies</label>
+    </div>
+  </div>
+  
+  <div *ngIf="queryResult">
+    <div *ngIf="isMovies == 1">
+    <app-movie-list (onSelectedMovie)="onSelectedMovie($event)" [movies]="queryResult.results"></app-movie-list>
+  </div>
+  <div *ngIf="isMovies == 0">
+    <app-serie-list (onSelectedSerieEpisode)="onSelectedSerieEpisode($event)" [series]="queryResult.results"></app-serie-list>
+  </div>
+  </div>
+  

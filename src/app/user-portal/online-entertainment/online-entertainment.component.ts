@@ -1,9 +1,9 @@
-import { Component } from '@angular/core';
-import {OnlineEntertainmentService} from "./online-entertainment.service";
-import {OnlineEntertainment} from "../../models/online-entertainment.model";
-import {ActivatedRoute} from "@angular/router";
-import { FormBuilder, Validators } from '@angular/forms';
-import { FormGroup } from '@angular/forms';
+import { OnlineEntertainment } from "src/app/models/online-entertainment.model";
+import { OnlineEntertainmentService } from "./online-entertainment.service";
+import { DatePipe } from "@angular/common";
+import { Component } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
+import { Entertainment, EntertainmentType } from "src/app/models/entertainment.model";
 
 @Component({
   selector: 'app-online-entertainment',
@@ -11,30 +11,40 @@ import { FormGroup } from '@angular/forms';
   styleUrls: ['./online-entertainment.component.scss']
 })
 export class OnlineEntertainmentComponent {
-  queryResult:  any;
-  query: string = '';
-  onlineEntertainment: OnlineEntertainment = {
-    name: '',
-    duration: 0,
-    rating: 0,
-    episode: 0,
-    link: '',
-    genres: []
-  };
+  onlineEntertainmentMovies: OnlineEntertainment[] = [];
+  onlineEntertainmentSeries: OnlineEntertainment[] = [];
+  seeItem: boolean = false;
 
 
-  constructor(private onlineEntertainmentService: OnlineEntertainmentService, private activatedRoute: ActivatedRoute,private fb: FormBuilder) {
+  constructor(private onlineEntertainmentService: OnlineEntertainmentService, private activatedRoute: ActivatedRoute) {
   }
+
 
   ngOnInit() {
     this.activatedRoute.params.subscribe((params) => {
-      this.onlineEntertainmentService.getOnlineEntertainment(params['id']).subscribe( (response: OnlineEntertainment) => {
-        this.onlineEntertainment = response;
+      this.onlineEntertainmentService.getEntertainments(params['id']).subscribe( (response: Entertainment[]) => {
+        console.log(response);
+        for(let entertainment of response) {
+          if(entertainment.type === EntertainmentType.MOVIE) {
+            if (entertainment.onlineEntertainmentId) {
+              this.onlineEntertainmentService.getOnlineEntertainment(entertainment.onlineEntertainmentId).subscribe((response: OnlineEntertainment) => {
+                this.onlineEntertainmentMovies.push(response);
+              })
+            }
+          } 
+          if(entertainment.type === EntertainmentType.SHOW) {
+            if (entertainment.onlineEntertainmentId) {
+              this.onlineEntertainmentService.getOnlineEntertainment(entertainment.onlineEntertainmentId).subscribe((response: OnlineEntertainment) => {
+                this.onlineEntertainmentSeries.push(response);
+              })
+            }
+          }
+        }
       })
     })
   }
 
-  onQuery() {
-    this.onlineEntertainmentService.queryWithoutPage(this.query).subscribe((data: any) => { this.queryResult = data; console.log(data); });
+  buttonClick(){
+    this.seeItem = !this.seeItem;
   }
 }

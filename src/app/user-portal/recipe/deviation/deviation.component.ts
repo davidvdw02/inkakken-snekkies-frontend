@@ -48,7 +48,6 @@ export class DeviationComponent implements OnChanges {
   }
 
   submitChanges() {
-    console.log(this.deviation)
     if (this.deviationForm.valid) {
       if (this.deviation) {
         this.deviation.addedOrSubstracted = this.deviationForm.value.addedOrSubstracted;
