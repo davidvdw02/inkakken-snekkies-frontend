@@ -190,7 +190,8 @@ export class RecipeComponent {
         const deviation = this.deviations[i];
         if (
           !deviation.ingredient ||
-          !deviation.amount ||
+          deviation.amount === undefined ||
+          deviation.amount < 0 || 
           deviation.addedOrSubstracted === undefined
         ) {
           this.error = `Deviated ingredient is missing required fields.`;
