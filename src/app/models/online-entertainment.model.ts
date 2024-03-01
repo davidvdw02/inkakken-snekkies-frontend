@@ -2,6 +2,7 @@ import {Genre} from "./genre.model";
 
 export type OnlineEntertainment = {
    id?: string;
+   tmdbId: number;
   title: string;
   duration: number;
   rating: number;
@@ -9,7 +10,7 @@ export type OnlineEntertainment = {
   posterPath: string;
   genres: Genre[];
   releaseDate: Date;
-  season?: number | null;
-  episodeTitle?: string | null;
-  stillImagePath?: string | null;
+  season: number | null;
+  episodeTitle: string | null;
+  stillImagePath: string | null;
 };

@@ -1,6 +1,6 @@
 import { DatePipe } from '@angular/common';
 import { Component, Input } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { OnlineEntertainment } from 'src/app/models/online-entertainment.model';
 import { OnlineEntertainmentService } from '../online-entertainment.service';
 import { EntertainmentType } from 'src/app/models/entertainment.model';
@@ -24,11 +24,16 @@ export class OnlineEntertainmentItemComponent {
     posterPath: '',
     genres: [],
     releaseDate: new Date(),
+    tmdbId: 0,
+    season: null,
+    episodeTitle: null,
+    stillImagePath: null
   };
 
   constructor(
     private onlineEntertainmentService: OnlineEntertainmentService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private router: Router
   ) {}
 
   ngOnInit() {
@@ -80,10 +85,12 @@ export class OnlineEntertainmentItemComponent {
       this.onlineEntertainmentService
         .postEntertainment({
           movieNightId: this.movienightId,
-          onlineEntertainmentId: onlineEntertainmentWithId.id,
+          onlineEntertainmentId: onlineEntertainmentWithId.id ?? '',
           type: type,
+          rating: 0,
+          snekkies: []
         })
-        .subscribe((data: any) => console.log(data));
+        .subscribe((data: any) => this.router.navigate(['entertainment/id/' + data.id]));
     });
   }
 }

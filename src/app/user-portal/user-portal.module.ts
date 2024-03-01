@@ -24,6 +24,10 @@ const userPortalRoutes: Routes = [
     path: 'onlineentertainment', loadChildren: () =>  import('./online-entertainment/online-entertainment.module')
       .then((m) => m.OnlineEntertainmentModule)
   },
+  {
+    path: 'entertainment', loadChildren: () => import('./entertainment/entertainment.module')
+      .then((m) => m.EntertainmentModule)
+  }
 ]
 
 @NgModule({

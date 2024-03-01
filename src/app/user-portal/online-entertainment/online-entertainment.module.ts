@@ -8,7 +8,7 @@ import { OnlineEntertainmentItemComponent } from './online-entertainment-item/on
 import { SerieListComponent } from './online-entertainment-item/serie-list/serie-list.component';
 
 
-const entertainmentRoutes: Routes = [
+const onlineEntertainmentRoutes: Routes = [
   {
     path: 'id/:id', component: OnlineEntertainmentComponent,
   }
@@ -19,7 +19,7 @@ const entertainmentRoutes: Routes = [
   imports: [
     CommonModule,
     FormsModule,
-    RouterModule.forChild(entertainmentRoutes),
+    RouterModule.forChild(onlineEntertainmentRoutes),
     ReactiveFormsModule,
   ]
 })

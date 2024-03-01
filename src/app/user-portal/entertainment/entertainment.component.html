@@ -1,0 +1,46 @@
+<div class="h-full bg-gray-100">
+    <button (click)="onBackClick()" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-block">Back to Overview</button>
+    <div *ngIf="entertainment.type == 'MOVIE'" class="rounded-lg p-8 flex items-center">
+        <img [src]="'https://image.tmdb.org/t/p/w400/'+ onlineEntertainment.posterPath" alt="Movie Poster" class="mr-8">
+        <div class="flex flex-col">
+            <div class="mb-4">
+                <p class="text-4xl font-bold mb-2">{{onlineEntertainment.title}}</p>
+                <p class="text-xl font-semibold mb-4">Rating: <span class="text-2xl font-bold">{{onlineEntertainment.rating}}</span></p>
+            </div>
+            <div class="mb-4">
+                <p class="mb-2 text-lg font-semibold">Our Rating:</p>
+                <input (change)="updateRating()" type="number" [(ngModel)]="entertainment.rating" name="rating" class="bg-white rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+            </div>
+        </div>
+    </div>
+
+    <div *ngIf="entertainment.type == 'SHOW'" class="bg-gray-100 rounded-lg p-8 flex items-center">
+        <img [src]="'https://image.tmdb.org/t/p/w400/'+ onlineEntertainment.posterPath" alt="Serie Poster" class="mr-8">
+        <div class="flex flex-col">
+            <div class="mb-4">
+                <p class="text-4xl font-bold mb-2">{{onlineEntertainment.title}}</p>
+                <p class="mb-2">Episode: {{onlineEntertainment.episode}} {{onlineEntertainment.episodeTitle}}</p>
+                <p class="text-xl font-semibold mb-4">Rating: <span class="text-2xl font-bold">{{onlineEntertainment.rating}}</span></p>
+            </div>
+            <div class="mb-4 max-w-md mx-auto">
+                <img [src]="'https://image.tmdb.org/t/p/w400/'+ onlineEntertainment.stillImagePath" class="w-full rounded-lg shadow-lg" alt="Serie Poster">
+            </div>
+            <div class="mb-4">
+                <p class="mb-2 text-lg font-semibold">Our Rating:</p>
+                <input (change)="updateRating()" type="number" [(ngModel)]="entertainment.rating" name="rating" class="bg-white rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50">
+            </div>
+        </div>
+    </div>
+
+    <div class="overflow-x-auto mb-4 max-w-6xl mx-auto">
+        <div class="flex flex-no-wrap justify-center" style="height: min-content;">
+            <div *ngFor="let cast of casts" class="flex flex-col items-center mr-4 bg-gray-200 rounded-lg p-4 inline-block" style="height: min-content;">
+                <div class="rounded-full overflow-hidden h-20 w-20 flex items-center justify-center bg-gray-400">
+                    <img [src]="'https://image.tmdb.org/t/p/w400/'+ cast.profile_path" class="h-full w-full object-cover" alt="Profile Image">
+                </div>
+                <p class="text-center mt-2 text-lg font-semibold">{{cast.name}}</p>
+                <p class="text-center text-sm italic">{{cast.character}}</p>
+            </div>
+        </div>
+    </div>
+</div>
