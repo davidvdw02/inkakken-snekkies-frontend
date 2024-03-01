@@ -1,6 +1,6 @@
 import { ChangeDetectorRef, Component } from '@angular/core';
 import { RecipeService } from '../recipe.service';
-import { ActivatedRoute } from '@angular/router';
+import {ActivatedRoute, Router} from '@angular/router';
 import { Recipe } from 'src/app/models/recipe.model';
 import { AbstractControl, FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
 import { RecipeFormService } from './recipe-form.service';
@@ -18,19 +18,20 @@ export class RecipeFormComponent {
   recipeForm!: FormGroup;
   recipe: Recipe = {};
 
-  constructor(private recipeService: RecipeService, 
-              private activatedRoute: ActivatedRoute, 
-              private formBuilder: FormBuilder, 
-              private recipeFormService: RecipeFormService) { 
+  constructor(private recipeService: RecipeService,
+              private activatedRoute: ActivatedRoute,
+              private formBuilder: FormBuilder,
+              private recipeFormService: RecipeFormService,
+              private router: Router) {
                 this.apiUrl = environment.apiUrl;
               }
 
-  ngOnInit(): void { 
+  ngOnInit(): void {
     this.activatedRoute.params.subscribe((params) => {
       this.recipeService.getRecipe(params['id']).subscribe((data: any) => {
         this.recipe = data;
         this.initForm();
-      }); 
+      });
     });
     this.initForm();
   }
@@ -66,7 +67,7 @@ export class RecipeFormComponent {
   onPictureSelected(event: any) {
     const file: File = event.target.files[0];
     const reader = new FileReader();
-    
+
     reader.onload = () => {
       const base64Data: string = reader.result as string;
       const newImageDTO: NewPictureDto = {
@@ -74,12 +75,16 @@ export class RecipeFormComponent {
         picture: base64Data
       }
       this.recipeFormService.uploadImage(newImageDTO).subscribe(
-        (data: RecipePicture) => { 
+        (data: RecipePicture) => {
           this.addImageOnce(data)
         }
       );
     };
     reader.readAsDataURL(file);
   }
+
+  navigateNext() {
+      this.router.navigateByUrl('/onlineentertainment/id/' + this.recipe.movieNightId);
+  }
 }
-  
+

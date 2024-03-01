@@ -1,0 +1,14 @@
+<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" >
+<div *ngFor="let movie of movies" class="border rounded-lg overflow-hidden shadow-lg" style="width: 300px;">
+    <div (click)="onMediaClick(movie)">
+      <div class="p-4">
+        <p class="text-lg font-semibold mb-2">{{movie.title}}</p>
+        <p>{{formatDate(movie.release_date)}}</p>
+      </div>
+      <div *ngIf="movie.release_date == null || movie.release_date.length === 0" class="p-4">
+        <p class="text-lg font-semibold mb-2">Media hasn't released yet</p>
+      </div>
+      <img *ngIf="movie.release_date != null && movie.release_date.length != 0" [src]="'https://image.tmdb.org/t/p/w400/'+movie.poster_path" alt="{{movie.title}}" class="h-auto w-full">
+    </div>
+  </div>
+</div>

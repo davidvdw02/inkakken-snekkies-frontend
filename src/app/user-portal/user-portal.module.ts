@@ -20,6 +20,10 @@ const userPortalRoutes: Routes = [
     path: 'recipe', loadChildren: () => import('./recipe/recipe.module')
       .then((m) => m.RecipeModule)
   },
+  {
+    path: 'onlineentertainment', loadChildren: () =>  import('./online-entertainment/online-entertainment.module')
+      .then((m) => m.OnlineEntertainmentModule)
+  },
 ]
 
 @NgModule({

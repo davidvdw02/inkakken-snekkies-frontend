@@ -1,16 +1,15 @@
 import {Snekkie} from "./snekkie.model";
 
 export type Entertainment = {
-  id: string;
-  rating: number;
-  duration: number;
-  type: Type;
-  onlineEntertainmentId: string;
-  movieNightId: string;
-  snekkies: Snekkie[];
+  id?: string;
+  rating?: number;
+  type?: EntertainmentType;
+  onlineEntertainmentId?: string;
+  movieNightId?: string;
+  snekkies?: Snekkie[];
 }
 
-enum Type {
-  MOVIE,
-  SHOW,
+export enum EntertainmentType {
+  MOVIE = 'MOVIE',
+  SHOW = 'SHOW',
 }

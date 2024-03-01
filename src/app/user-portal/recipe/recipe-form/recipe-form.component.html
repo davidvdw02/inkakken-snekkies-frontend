@@ -3,7 +3,7 @@
         <label for="grade" class="block text-gray-700 font-bold mb-2">Grade:</label>
         <input  (change)="onGradeChange($event)" type="number" id="grade" formControlName="grade" class="border rounded-lg py-2 px-4 w-full" />
     </div>
-  
+
     <div formArrayName="recipePictures">
         <div *ngFor="let picture of getRecipePicturesControls(); let i = index" [formGroupName]="i" class="mb-4">
             <label for="picture" class="block text-gray-700 font-bold mb-2">Upload Picture:</label>
@@ -16,5 +16,5 @@
             <img [src]="apiUrl+ recipe.recipePictures[i].pictureReference" class="w-full h-1/">
         </div>
     </ng-container>
-    <button type="submit" class="bg-blue-500 text-white py-2 px-4 rounded-lg mt-4">Next</button>
+    <button type="submit" (click)="navigateNext()" class="bg-blue-500 text-white py-2 px-4 rounded-lg mt-4">Next</button>
 </form>
