@@ -6,17 +6,16 @@
   {{ seeItem ? 'Back' : 'Create new' }}
 </button>
 
-<div *ngIf="!seeItem">
-  <div *ngFor="let onlineMovie of onlineEntertainmentMovies" class="bg-white rounded-lg shadow-md p-2 mb-4 max-w-xs">
+<div *ngIf="!seeItem" class="flex flex-wrap justify-start">
+  <div (click)="onEntertainmentCLick(onlineMovie?.id || '')" *ngFor="let onlineMovie of onlineEntertainmentMovies" class="bg-white rounded-lg shadow-md p-2 mb-4 max-w-xs mr-4">
     <p class="text-center font-bold">{{onlineMovie.title}}</p>
     <img [src]="'https://image.tmdb.org/t/p/w400/'+ onlineMovie.posterPath" class="h-auto w-full mx-auto mt-2">
-</div>
-<div *ngFor="let onlineSerie of onlineEntertainmentSeries" class="bg-white rounded-lg shadow-md p-2 mb-4 max-w-xs">
+  </div>
+  <div (click)="onEntertainmentCLick(onlineSerie?.id || '')" *ngFor="let onlineSerie of onlineEntertainmentSeries" class="bg-white rounded-lg shadow-md p-2 mb-4 max-w-xs mr-4">
     <p class="text-center font-bold">{{onlineSerie.title}}</p>
     <p class="text-center">{{onlineSerie.episodeTitle}}</p>
     <img [src]="'https://image.tmdb.org/t/p/w400/'+ onlineSerie.stillImagePath" class="h-auto w-full mx-auto mt-2">
-</div>
-
+  </div>
 </div>
 <div *ngIf="seeItem">
 <app-online-entertainment-item></app-online-entertainment-item>

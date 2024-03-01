@@ -34,7 +34,6 @@ export class DeviationComponent implements OnChanges {
   }
 
   initializeForm(): void {
-    console.log(this.deviation);
     this.deviationForm = this.formBuilder.group({
       ingredient: [this.deviation!.ingredient.name || '', [Validators.required, Validators.pattern('[a-zA-Z\s]+')]],
       amount: [this.deviation!.amount , [Validators.required, Validators.pattern('[0-9]*')]],

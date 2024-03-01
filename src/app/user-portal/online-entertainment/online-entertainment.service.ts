@@ -15,7 +15,7 @@ export class OnlineEntertainmentService {
   }
 
   getEntertainments(movieNightId: string): any {
-    return this.http.get(this.apiUrl + 'entertainment/' + movieNightId);
+    return this.http.get(this.apiUrl + 'entertainment/movienight/' + movieNightId);
   }
   getOnlineEntertainment(onlineEntertainmentId: string): any {
     return this.http.get(this.apiUrl + 'onlineentertainment/' + onlineEntertainmentId);
